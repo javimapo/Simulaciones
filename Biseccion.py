@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import plotly.graph_objs as go
 
 # Título y descripción
 st.title('Cálculo del Tiempo de Reacción: Método Analítico vs. Bisección')
@@ -42,3 +43,17 @@ def bisection_method(f, a, b, tol, max_iter):
 # Ejecutar el método de bisección
 t_biseccion = bisection_method(f, a, b, tol, max_iter)
 st.write(f'Tiempo (Bisección): {t_biseccion:.6f} s')
+
+# Generar datos para la gráfica
+t_vals = np.linspace(0, t_biseccion, 100)
+C_vals = C0 * np.exp(-k * t_vals)
+
+# Crear la gráfica con Plotly
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=t_vals, y=C_vals, mode='lines', name='Concentración vs Tiempo'))
+
+# Configurar el diseño de la gráfica
+fig.update_layout(title='Concentración vs Tiempo', xaxis_title='Tiempo (s)', yaxis_title='Concentración (mg/L)', template='plotly_white')
+
+# Mostrar la gráfica
+st.plotly_chart(fig)
